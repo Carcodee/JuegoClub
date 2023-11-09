@@ -1,10 +1,13 @@
+using Cinemachine;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEditor.Rendering;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class HandController : MonoBehaviour
 {
+    public CinemachineVirtualCamera vcam;
     public Camera cam;
     public LayerMask playeableZone;
     public Transform body;
@@ -15,12 +18,14 @@ public class HandController : MonoBehaviour
     public float heightSpeed;
     float xRotation;
     float yRotation;
-    public Transform currentObject;
 
+    [Header("Object")]
+    
+    public Transform currentObject;
+    public bool objectPicked = false;
     void Start()
     {
-            currentObject.parent = transform;
-
+        currentObject.parent = transform;
     }
 
     void Update()
@@ -30,13 +35,18 @@ public class HandController : MonoBehaviour
             RotateHand();
             return;
         }
-        if (Input.GetKey(KeyCode.Mouse0))
+        if (Input.GetKey(KeyCode.Mouse0)&&currentObject!=null)
         {
             Pick();
         }
-        else
+
+        if (Input.GetKey(KeyCode.A))
         {
-            currentObject.parent = transform;
+            vcam.transform.Translate(-Vector3.right * Time.deltaTime * 2);
+        }
+        if (Input.GetKey(KeyCode.D))
+        {
+            vcam.transform.Translate(Vector3.right * Time.deltaTime * 2);
         }
         xRotation = 0;
 
@@ -55,7 +65,7 @@ public class HandController : MonoBehaviour
     public void SetBodyHeight()
     {
 
-        if (Input.GetKey(KeyCode.W))
+        if (Input.GetKey(KeyCode.W) )
         {
             body.Translate(Vector3.up * heightSpeed * Time.deltaTime);
         }
@@ -81,28 +91,34 @@ public class HandController : MonoBehaviour
     }
     public void Pick()
     {
-        
-        if (currentObject != null)
+        if (objectPicked)
         {
-            currentObject.parent = transform;
+            currentObject.position = hand.position;
         }
-
     }
     private void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("Organo"))
+        if (other.TryGetComponent<DropZone>(out DropZone d)) return;
+        
+        //interface
+        //TODO: This is wrong, we need to check if the object is pickable
+        if (other.transform.parent.transform.parent.TryGetComponent<ObjectController>(out ObjectController obj))
         {
             currentObject = other.GetComponent<Transform>();
+            obj.isPicked=true;
+            objectPicked=true;
         }
     }
     private void OnTriggerExit(Collider other)
     {
-        if (other.CompareTag("Organo"))
+        if (other.TryGetComponent<DropZone>(out DropZone d)) return;
+        objectPicked = true;
+        if (other.transform.parent.transform.parent.TryGetComponent<ObjectController>(out ObjectController obj))
         {
-            currentObject.parent = null;
+            obj.isPicked = false;
             currentObject = null;
-
         }
+
     }
     
 }
