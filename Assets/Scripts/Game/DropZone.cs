@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class DropZone : MonoBehaviour
 {
-    int points = 0;
     void Start()
     {
         
@@ -16,11 +15,12 @@ public class DropZone : MonoBehaviour
     }
     private void OnTriggerEnter(Collider other)
     {
-        if (other.TryGetComponent<HandController>(out HandController hand)) return;
-        if (other.transform.parent.transform.parent.TryGetComponent<ObjectController>(out ObjectController obj))
+        if (other.TryGetComponent<ObjectController>(out ObjectController obj))
         {
-            Destroy(obj);
-            points++;
+            GameManager.OnItemDropedCorrectly?.Invoke();
+            Destroy(obj.gameObject);
+
+
         }
     }
 }

@@ -18,6 +18,8 @@ public class HandController : MonoBehaviour
     public float heightSpeed;
     float xRotation;
     float yRotation;
+    //this will control the height
+    float heightOffSet;
 
     [Header("Object")]
     
@@ -67,11 +69,11 @@ public class HandController : MonoBehaviour
 
         if (Input.GetKey(KeyCode.W) )
         {
-            body.Translate(Vector3.up * heightSpeed * Time.deltaTime);
+            body.Translate(-Vector3.up * heightSpeed * Time.deltaTime);
         }
         if (Input.GetKey(KeyCode.S))
         {
-            body.Translate(-Vector3.up * heightSpeed * Time.deltaTime);
+            body.Translate(Vector3.up * heightSpeed * Time.deltaTime);
         }
     }
 
@@ -98,11 +100,14 @@ public class HandController : MonoBehaviour
     }
     private void OnTriggerEnter(Collider other)
     {
-        if (other.TryGetComponent<DropZone>(out DropZone d)) return;
-        
+        if (other.TryGetComponent<IDangerZone>(out IDangerZone dangerElement))
+        {
+            dangerElement.HandleDamage();
+            //actions when the player gets hit
+        }
         //interface
         //TODO: This is wrong, we need to check if the object is pickable
-        if (other.transform.parent.transform.parent.TryGetComponent<ObjectController>(out ObjectController obj))
+        if (other.TryGetComponent<ObjectController>(out ObjectController obj))
         {
             currentObject = other.GetComponent<Transform>();
             obj.isPicked=true;
@@ -111,9 +116,8 @@ public class HandController : MonoBehaviour
     }
     private void OnTriggerExit(Collider other)
     {
-        if (other.TryGetComponent<DropZone>(out DropZone d)) return;
         objectPicked = true;
-        if (other.transform.parent.transform.parent.TryGetComponent<ObjectController>(out ObjectController obj))
+        if (other.TryGetComponent<ObjectController>(out ObjectController obj))
         {
             obj.isPicked = false;
             currentObject = null;
