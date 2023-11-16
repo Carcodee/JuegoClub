@@ -13,21 +13,31 @@ public class HandController : MonoBehaviour
     public Transform body;
     public Transform plane;
     public Transform hand;
+
+    [Header("HandConfigs")]
     public float maxHandHeight;
     public float sensibility;
     public float heightSpeed;
     float xRotation;
     float yRotation;
     //this will control the height
-    float heightOffSet;
+    public float heightOffSet;
+    public float maxHeight;
 
     [Header("Object")]
     
     public Transform currentObject;
+    public Transform pickPoint;
     public bool objectPicked = false;
+
+    [Header("PickObj")]
+    public float holdTime;
+    public float currentTime;
+    
     void Start()
     {
         currentObject.parent = transform;
+        pickPoint.parent = transform;
     }
 
     void Update()
@@ -37,10 +47,20 @@ public class HandController : MonoBehaviour
             RotateHand();
             return;
         }
-        if (Input.GetKey(KeyCode.Mouse0)&&currentObject!=null)
+        if (Input.GetKey(KeyCode.Mouse0) && currentObject!=null &&!objectPicked)
+        {
+            SetHandToTargetPos();
+            return;
+        }
+        if (Input.GetKey(KeyCode.Mouse0) && currentObject != null && objectPicked)
         {
             Pick();
         }
+        else if(currentTime > 0)
+        {
+            currentTime -= Time.deltaTime;
+        }
+        
 
         if (Input.GetKey(KeyCode.A))
         {
@@ -53,27 +73,43 @@ public class HandController : MonoBehaviour
         xRotation = 0;
 
         SetHandPos();
-        SetBodyHeight();
+        SetHandHeight();
     }
     public void SetHandPos()
     {
         Ray ray = cam.ScreenPointToRay(Input.mousePosition);
         if (Physics.Raycast(ray, out RaycastHit hit, 15, playeableZone))
         {
-            transform.position = hit.point;
+            transform.position =new Vector3(hit.point.x, hit.point.y + heightOffSet, hit.point.z);
         }
        
     }
-    public void SetBodyHeight()
+    public void SetHandToTargetPos()
+    {
+        if (currentObject!=null)
+        {
+            if (currentTime >= 1)
+            {
+                Pick();
+                return;
+            }
+            currentTime += Time.deltaTime;
+            Vector3 dir= pickPoint.position- currentObject.transform.position;
+            transform.position = Vector3.Lerp(transform.position, pickPoint.position, currentTime);
+            
+        }
+    }
+    
+    public void SetHandHeight()
     {
 
-        if (Input.GetKey(KeyCode.W) )
+        if (Input.GetKey(KeyCode.S) && heightOffSet > 0 )
         {
-            body.Translate(-Vector3.up * heightSpeed * Time.deltaTime);
+            heightOffSet -= 0.01f ;
         }
-        if (Input.GetKey(KeyCode.S))
+        if (Input.GetKey(KeyCode.W)&& heightOffSet < maxHandHeight)
         {
-            body.Translate(Vector3.up * heightSpeed * Time.deltaTime);
+            heightOffSet += 0.01f;
         }
     }
 
@@ -109,7 +145,8 @@ public class HandController : MonoBehaviour
         //TODO: This is wrong, we need to check if the object is pickable
         if (other.TryGetComponent<ObjectController>(out ObjectController obj))
         {
-            currentObject = other.GetComponent<Transform>();
+            currentObject = obj.transform;
+            pickPoint = obj.pickSpot;
             obj.isPicked=true;
             objectPicked=true;
         }
@@ -120,6 +157,7 @@ public class HandController : MonoBehaviour
         if (other.TryGetComponent<ObjectController>(out ObjectController obj))
         {
             obj.isPicked = false;
+            pickPoint = null;
             currentObject = null;
         }
 

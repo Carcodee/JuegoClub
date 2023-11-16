@@ -6,6 +6,7 @@ public class ObjectController : MonoBehaviour
 {
     public bool isPicked = false;
     public Rigidbody rb;
+    public Transform pickSpot;
     void Start()
     {
         rb.isKinematic = false;

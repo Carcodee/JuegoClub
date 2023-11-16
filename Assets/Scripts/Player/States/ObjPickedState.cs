@@ -2,9 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MovementState : HandStateMachine
+public class ObjPickedState : HandStateMachine
 {
-    public MovementState(HandController handController, string stateName) : base(handController, stateName)
+    public ObjPickedState(HandController handController, string stateName) : base(handController, stateName)
     {
 
     }
