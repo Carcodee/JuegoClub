@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEditor.Rendering;
 using UnityEngine;
+using UnityEngine.Android;
 using UnityEngine.UI;
 
 public class HandController : MonoBehaviour
@@ -23,21 +24,27 @@ public class HandController : MonoBehaviour
     //this will control the height
     public float heightOffSet;
     public float maxHeight;
-
+    public Vector3 cursorPos;
     [Header("Object")]
     
     public Transform currentObject;
     public Transform pickPoint;
     public bool objectPicked = false;
-
+    public Vector3 targetPos;
+    public Vector3 endPos;
     [Header("PickObj")]
     public float holdTime;
     public float currentTime;
+
+    [Header("StateMachine")]
+    public StateMachineController controller;
     
     void Start()
     {
         currentObject.parent = transform;
         pickPoint.parent = transform;
+        controller.Initializate();
+        //TODO: Do lerp of cursor pos
     }
 
     void Update()
@@ -47,21 +54,7 @@ public class HandController : MonoBehaviour
             RotateHand();
             return;
         }
-        if (Input.GetKey(KeyCode.Mouse0) && currentObject!=null &&!objectPicked)
-        {
-            SetHandToTargetPos();
-            return;
-        }
-        if (Input.GetKey(KeyCode.Mouse0) && currentObject != null && objectPicked)
-        {
-            Pick();
-        }
-        else if(currentTime > 0)
-        {
-            currentTime -= Time.deltaTime;
-        }
         
-
         if (Input.GetKey(KeyCode.A))
         {
             vcam.transform.Translate(-Vector3.right * Time.deltaTime * 2);
@@ -71,9 +64,7 @@ public class HandController : MonoBehaviour
             vcam.transform.Translate(Vector3.right * Time.deltaTime * 2);
         }
         xRotation = 0;
-
-        SetHandPos();
-        SetHandHeight();
+        controller.StateUpdate();
     }
     public void SetHandPos()
     {
@@ -81,21 +72,16 @@ public class HandController : MonoBehaviour
         if (Physics.Raycast(ray, out RaycastHit hit, 15, playeableZone))
         {
             transform.position =new Vector3(hit.point.x, hit.point.y + heightOffSet, hit.point.z);
+            cursorPos= new Vector3(hit.point.x, hit.point.y + heightOffSet, hit.point.z);
         }
        
     }
-    public void SetHandToTargetPos()
+    public void SetHandToTargetPos(ref float timer)
     {
         if (currentObject!=null)
         {
-            if (currentTime >= 1)
-            {
-                Pick();
-                return;
-            }
-            currentTime += Time.deltaTime;
-            Vector3 dir= pickPoint.position- currentObject.transform.position;
-            transform.position = Vector3.Lerp(transform.position, pickPoint.position, currentTime);
+            timer += Time.deltaTime;
+            transform.position = Vector3.Lerp(targetPos, pickPoint.position, timer / 1);
             
         }
     }
@@ -129,10 +115,9 @@ public class HandController : MonoBehaviour
     }
     public void Pick()
     {
-        if (objectPicked)
-        {
-            currentObject.position = hand.position;
-        }
+        objectPicked = true;
+        currentObject.position = hand.position;
+        
     }
     private void OnTriggerEnter(Collider other)
     {
@@ -148,7 +133,6 @@ public class HandController : MonoBehaviour
             currentObject = obj.transform;
             pickPoint = obj.pickSpot;
             obj.isPicked=true;
-            objectPicked=true;
         }
     }
     private void OnTriggerExit(Collider other)
@@ -159,6 +143,8 @@ public class HandController : MonoBehaviour
             obj.isPicked = false;
             pickPoint = null;
             currentObject = null;
+            objectPicked = false;
+
         }
 
     }

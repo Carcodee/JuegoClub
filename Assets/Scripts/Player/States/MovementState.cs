@@ -4,28 +4,36 @@ using UnityEngine;
 
 public class MovementState : HandStateMachine
 {
-    public MovementState(HandController handController, string stateName) : base(handController, stateName)
+    public MovementState(StateMachineController stateMachineController, string stateName) : base(stateMachineController, stateName)
+    {
+        handController = stateMachineController.GetComponent<HandController>();
+    }
+    public override void StateInput()
     {
 
     }
-
     public override void Initializate()
     {
-        throw new System.NotImplementedException();
+
     }
 
     public override void stateExit()
     {
-        throw new System.NotImplementedException();
     }
 
     public override void stateFixUpdate()
     {
-        throw new System.NotImplementedException();
+        
     }
 
     public override void stateUpdate()
     {
-        throw new System.NotImplementedException();
+        handController.SetHandPos();
+        handController.SetHandHeight();
+        if (Input.GetKeyDown(KeyCode.Mouse0)&&handController.currentObject!=null)
+        {
+            StateMachineController.SetStateByName("Picking");
+        }
+        
     }
 }
