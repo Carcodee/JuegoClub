@@ -19,6 +19,7 @@ public class HandController : MonoBehaviour
     public float maxHandHeight;
     public float sensibility;
     public float heightSpeed;
+    public float handSpeed;
     float xRotation;
     float yRotation;
     //this will control the height
@@ -64,17 +65,25 @@ public class HandController : MonoBehaviour
             vcam.transform.Translate(Vector3.right * Time.deltaTime * 2);
         }
         xRotation = 0;
+        Debug.Log(controller.currentState.stateName);
+        SetCursorPos();
         controller.StateUpdate();
     }
-    public void SetHandPos()
+    public void SetCursorPos()
     {
         Ray ray = cam.ScreenPointToRay(Input.mousePosition);
         if (Physics.Raycast(ray, out RaycastHit hit, 15, playeableZone))
         {
-            transform.position =new Vector3(hit.point.x, hit.point.y + heightOffSet, hit.point.z);
-            cursorPos= new Vector3(hit.point.x, hit.point.y + heightOffSet, hit.point.z);
+            cursorPos= new Vector3(hit.point.x, hit.point.y, hit.point.z);
         }
        
+    }
+    public void SetHandPos()
+    {
+        if (transform.position == cursorPos) return;
+        Vector3 target = (cursorPos-transform.position).normalized;
+        transform.position+=target * handSpeed * Time.deltaTime;
+        transform.position = new Vector3(transform.position.x, cursorPos.y + heightOffSet, transform.position.z);
     }
     public void SetHandToTargetPos(ref float timer)
     {
@@ -117,7 +126,16 @@ public class HandController : MonoBehaviour
     {
         objectPicked = true;
         currentObject.position = hand.position;
+
         
+    }
+    public void GetPickableData()
+    {
+        currentObject.TryGetComponent<IPickableType<HoldeableData>>(out IPickableType<HoldeableData> pickable);
+        HoldeableData data = pickable.PickableType();
+        holdTime = data.timeToRelease;
+        Debug.Log(holdTime);
+        controller.SetStateByName(data.pickTypeName);
     }
     private void OnTriggerEnter(Collider other)
     {

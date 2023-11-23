@@ -10,16 +10,19 @@ public class StateMachineController : MonoBehaviour
     public MovementState movement;
     public PickingState pickingState;
     public ObjPickedState objPicked;
+    public OnHoldState onHold;
+
     public void Initializate()
     {
-        handStates = new HandStateMachine[3];
+        handStates = new HandStateMachine[4];
         movement = new MovementState(this, "Movement");
         pickingState = new PickingState(this, "Picking");
         objPicked = new ObjPickedState(this, "Picked");
-        
+        onHold = new OnHoldState(this, "Holdeable");
         handStates[0] = movement;
         handStates[1] = pickingState;
         handStates[2] = objPicked;
+        handStates[3] = onHold;
         currentState = handStates[0];
 
         if (currentState != null)

@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 2160.6653, g: 2264.9026, b: 3288.2974, a: 1}
+  m_IndirectSpecularColor: {r: 2160.6653, g: 2264.9026, b: 3288.2896, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -1761,8 +1761,11 @@ MonoBehaviour:
   maxHandHeight: 2
   sensibility: 1
   heightSpeed: 1
+  handSpeed: 3
   heightOffSet: 0
   maxHeight: 3
+  cursorPos: {x: 0, y: 0, z: 0}
+  HoldTime: 0
   currentObject: {fileID: 894252444}
   pickPoint: {fileID: 894252444}
   objectPicked: 0
@@ -3524,6 +3527,16 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6926537660687778611, guid: 0e8019eb1569033448d9147f4179bae1,
+        type: 3}
+      propertyPath: pickTypeName
+      value: Holdeable
+      objectReference: {fileID: 0}
+    - target: {fileID: 6926537660687778611, guid: 0e8019eb1569033448d9147f4179bae1,
+        type: 3}
+      propertyPath: timeToRelease
+      value: 2
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
