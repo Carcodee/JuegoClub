@@ -26,7 +26,7 @@ public class PlayerStats
         this.playerPoints = playerPoints;
     }
 
-    public void AddPoints(int amount)
+    public void AddPoints(int amount)   
     {
         playerPoints+= amount;
     }

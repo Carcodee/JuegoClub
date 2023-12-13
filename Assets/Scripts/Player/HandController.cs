@@ -9,7 +9,14 @@ using UnityEngine.UI;
 public class HandController : MonoBehaviour
 {
     public CinemachineVirtualCamera vcam;
+    public CinemachineVirtualCamera lookStatsVcam;
+
     public Camera cam;
+    public Transform lookStats;
+    public Transform normalPos;
+
+
+
     public LayerMask playeableZone;
     public Transform body;
     public Transform plane;
@@ -40,6 +47,7 @@ public class HandController : MonoBehaviour
     [Header("StateMachine")]
     public StateMachineController controller;
     
+    
     void Start()
     {
         currentObject.parent = transform;
@@ -50,11 +58,11 @@ public class HandController : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetKey(KeyCode.Mouse1))
-        {
-            RotateHand();
-            return;
-        }
+        //if (Input.GetKey(KeyCode.Mouse1))
+        //{
+        //    RotateHand();
+        //    return;
+        //}
         
         if (Input.GetKey(KeyCode.A))
         {
@@ -64,6 +72,15 @@ public class HandController : MonoBehaviour
         {
             vcam.transform.Translate(Vector3.right * Time.deltaTime * 2);
         }
+        if(Input.GetKeyDown(KeyCode.Tab))
+        {
+            LookStats();
+        }
+        if (Input.GetKeyUp(KeyCode.Tab))
+        {
+            LookPacient();
+        }
+
         xRotation = 0;
         Debug.Log(controller.currentState.stateName);
         SetCursorPos();
@@ -77,6 +94,16 @@ public class HandController : MonoBehaviour
             cursorPos= new Vector3(hit.point.x, hit.point.y, hit.point.z);
         }
        
+    }
+    public void LookStats()
+    {
+        vcam.Priority = 0;
+        lookStatsVcam.Priority = 10;
+    }
+    public void LookPacient()
+    {
+        vcam.Priority = 10;
+        lookStatsVcam.Priority = 0;
     }
     public void SetHandPos()
     {
@@ -139,6 +166,7 @@ public class HandController : MonoBehaviour
     }
     private void OnTriggerEnter(Collider other)
     {
+
         if (other.TryGetComponent<IDangerZone>(out IDangerZone dangerElement))
         {
             dangerElement.HandleDamage();
@@ -148,6 +176,10 @@ public class HandController : MonoBehaviour
         //TODO: This is wrong, we need to check if the object is pickable
         if (other.TryGetComponent<ObjectController>(out ObjectController obj))
         {
+            if (pickPoint)
+            {
+                return;
+            }
             currentObject = obj.transform;
             pickPoint = obj.pickSpot;
             obj.isPicked=true;

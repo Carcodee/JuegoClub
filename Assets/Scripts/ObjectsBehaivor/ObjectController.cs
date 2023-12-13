@@ -22,8 +22,8 @@ public class ObjectController : MonoBehaviour, IPickableType<HoldeableData>
 
         IPickType = GetComponent<IPickableType<HoldeableData>>();
 
-        rb.isKinematic = false;
-        rb.useGravity = true;
+        rb.isKinematic = true;
+        rb.useGravity= false;
     }
 
     void Update()
@@ -32,10 +32,10 @@ public class ObjectController : MonoBehaviour, IPickableType<HoldeableData>
         {
             DeactivateRb();
         }
-        else
-        {
-            ActivateRb();
-        }
+        //else
+        //{
+        //    ActivateRb();
+        //}
     }
     public void DeactivateRb()
     {
