@@ -20,6 +20,8 @@ public class GameManager : MonoBehaviour
     public PlayerStats[] playerStats;
     public int currentPlayer = 0;
 
+    public PacientBehaivor currentPacient;
+
     private void OnEnable()
     {
         OnItemDropedCorrectly += AddPointToPlayer;
@@ -59,7 +61,7 @@ public class GameManager : MonoBehaviour
         playerStats = new PlayerStats[numberOfPlayers];
         for (int i = 0; i < playerStats.Length; i++)
         {
-            playerStats[i] = new PlayerStats(100, 0);
+            playerStats[i] = new PlayerStats(100, 0,currentPacient);
         }
     }
     public void AddPointToPlayer()

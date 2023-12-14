@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 
 
@@ -12,11 +13,13 @@ public class PlayerStats
     public int playerPoints;
     public int headClips;
     public int chestClips;
-    
-    public PlayerStats(int patienHealth, int playerPoints)
+
+    public PacientBehaivor pacient;
+    public PlayerStats(int patienHealth, int playerPoints, PacientBehaivor pacient)
     {
         this.patienHealth = patienHealth;
         this.playerPoints = playerPoints;
+        this.pacient = pacient;
     }
 
     public void AddPoints(int amount)   
@@ -42,17 +45,21 @@ public class PlayerStats
                 {
                     OpenHeadAnimation();
                     Debug.Log("OPEN HEAD");
+                    break;
                 }
+                OpenHeadRAnimation();
                 break;
             
             case ClipType.HeadL:
                 headClips++;
-                OpenHeadLAnimation();
                 if (headClips>=2)
                 {
                     OpenHeadAnimation();
                     Debug.Log("OPEN HEAD");
+                    break;
                 }
+                OpenHeadLAnimation();
+
                 break;
             
             case ClipType.Chest:
@@ -80,19 +87,25 @@ public class PlayerStats
     }
     public void OpenHeadAnimation()
     {
-        //open head
+        pacient.animator.SetBool("FullyOpen",true);
     }
     public void OpenHeadRAnimation()
     {
+        pacient.animator.Play("Armature|OpenRight1");
+
         //open Right Head
     }
     public void OpenHeadLAnimation()
     {
+        
+        pacient.animator.Play("Armature|OpenLeft1");
+
         //open Left Head
     }
     public void OpenChestAnimation()
     {
         //open chest
+        pacient.animator.Play("Armature|OpenStomach");
     }
     
 }

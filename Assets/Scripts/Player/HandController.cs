@@ -90,6 +90,7 @@ public class HandController : MonoBehaviour
     }
     public void SetCursorPos()
     {
+
         Ray ray = cam.ScreenPointToRay(Input.mousePosition);
         if (Physics.Raycast(ray, out RaycastHit hit, 15, playeableZone))
         {
@@ -117,10 +118,15 @@ public class HandController : MonoBehaviour
     }
     public void SetHandPos()
     {
-        if (transform.position == cursorPos) return;
+        if ((transform.position - cursorPos).magnitude <= Mathf.Epsilon)
+        {
+            return;
+        }
+        
         Vector3 target = (cursorPos-transform.position).normalized;
         transform.position+=target * handSpeed * Time.deltaTime;
-        transform.position = new Vector3(transform.position.x, cursorPos.y + heightOffSet, transform.position.z);
+        transform.position = new Vector3(transform.position.x, cursorPos.y + heightOffSet
+            , transform.position.z);
     }
     public void SetHandToTargetPos(ref float timer)
     {
