@@ -10,10 +10,8 @@ public class HandController : MonoBehaviour
 {
     public CinemachineVirtualCamera vcam;
     public CinemachineVirtualCamera lookStatsVcam;
-
+    public CinemachineVirtualCamera lookDroppeableZoneVcam;
     public Camera cam;
-    public Transform lookStats;
-    public Transform normalPos;
 
 
 
@@ -63,20 +61,24 @@ public class HandController : MonoBehaviour
         //    RotateHand();
         //    return;
         //}
-        
-        if (Input.GetKey(KeyCode.A))
-        {
-            vcam.transform.Translate(-Vector3.right * Time.deltaTime * 2);
-        }
-        if (Input.GetKey(KeyCode.D))
-        {
-            vcam.transform.Translate(Vector3.right * Time.deltaTime * 2);
-        }
+        //
+        // if (Input.GetKey(KeyCode.A))
+        // {
+        //     vcam.transform.Translate(-Vector3.right * Time.deltaTime * 2);
+        // }
+        // if (Input.GetKey(KeyCode.D))
+        // {
+        //     vcam.transform.Translate(Vector3.right * Time.deltaTime * 2);
+        // }
         if(Input.GetKeyDown(KeyCode.Tab))
         {
             LookStats();
         }
-        if (Input.GetKeyUp(KeyCode.Tab))
+        if (Input.GetKeyDown(KeyCode.D))
+        {
+            LookDroppeableZone();
+        }
+        if (Input.GetKeyUp(KeyCode.Tab)||Input.GetKeyUp(KeyCode.D))
         {
             LookPacient();
         }
@@ -98,12 +100,20 @@ public class HandController : MonoBehaviour
     public void LookStats()
     {
         vcam.Priority = 0;
+        lookDroppeableZoneVcam.Priority =0;
         lookStatsVcam.Priority = 10;
     }
     public void LookPacient()
     {
         vcam.Priority = 10;
+        lookDroppeableZoneVcam.Priority =0;
         lookStatsVcam.Priority = 0;
+    }
+    public void LookDroppeableZone()
+    {
+        vcam.Priority = 0;
+        lookStatsVcam.Priority = 0;
+        lookDroppeableZoneVcam.Priority = 10;
     }
     public void SetHandPos()
     {
@@ -176,7 +186,7 @@ public class HandController : MonoBehaviour
         //TODO: This is wrong, we need to check if the object is pickable
         if (other.TryGetComponent<ObjectController>(out ObjectController obj))
         {
-            if (pickPoint)
+            if (controller.currentState.stateName == "Picked")
             {
                 return;
             }
@@ -188,14 +198,17 @@ public class HandController : MonoBehaviour
     private void OnTriggerExit(Collider other)
     {
         objectPicked = true;
-        if (other.TryGetComponent<ObjectController>(out ObjectController obj))
+        if (currentObject==null)
         {
-            obj.isPicked = false;
-            pickPoint = null;
-            currentObject = null;
-            objectPicked = false;
-
+            if (other.TryGetComponent<ObjectController>(out ObjectController obj))
+            {
+                obj.isPicked = false;
+                pickPoint = null;
+                currentObject = null;
+                objectPicked = false;
+            }
         }
+
 
     }
     

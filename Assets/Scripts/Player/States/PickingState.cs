@@ -69,8 +69,8 @@ public class PickingState : HandStateMachine
             if (timer>=0.99f)
             {
                 StateMachineController.SetStateByName("Picked");
-
                 objPicked = true;
+                
             }
         }
 

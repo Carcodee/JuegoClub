@@ -18,8 +18,6 @@ public class DropZone : MonoBehaviour
         if (other.TryGetComponent<ObjectController>(out ObjectController obj))
         {
             GameManager.OnItemDropedCorrectly?.Invoke();
-            Destroy(obj.gameObject);
-
 
         }
     }

@@ -13,6 +13,9 @@ public class ObjectController : MonoBehaviour, IPickableType<HoldeableData>
     public string pickTypeName;
     public float timeToRelease;
     public HoldeableData holdData;
+    public ClipType objType;
+    public bool isReleased = false; 
+    
     void Start()
     {
         holdData.pickTypeName = pickTypeName;
@@ -22,21 +25,10 @@ public class ObjectController : MonoBehaviour, IPickableType<HoldeableData>
 
         IPickType = GetComponent<IPickableType<HoldeableData>>();
 
-        rb.isKinematic = true;
-        rb.useGravity= false;
+        DeactivateRb();
     }
 
-    void Update()
-    {
-        if (isPicked)
-        {
-            DeactivateRb();
-        }
-        //else
-        //{
-        //    ActivateRb();
-        //}
-    }
+
     public void DeactivateRb()
     {
         rb.isKinematic = true;

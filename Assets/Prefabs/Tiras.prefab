@@ -53,6 +53,8 @@ MonoBehaviour:
   pickSpot: {fileID: 737495597361479459}
   pickTypeName: 
   timeToRelease: 0
+  objType: 1
+  isReleased: 0
 --- !u!54 &881781501175322038
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -99,7 +101,7 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 0.1, y: 0.02, z: 0.19}
+  m_Size: {x: 0.05, y: 0.02, z: 0.15}
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!135 &7971166969055380256
 SphereCollider:
@@ -120,8 +122,8 @@ SphereCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Radius: 0.13
-  m_Center: {x: 0, y: 0.07, z: 0}
+  m_Radius: 0.09
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &3719903987672134534
 GameObject:
   m_ObjectHideFlags: 0

@@ -8,6 +8,7 @@ public class GameManager : MonoBehaviour
 {
     public static GameManager instance;
     public static Action OnItemDropedCorrectly;
+    public static Action <ClipType>OnClipRelease;
 
     [Header("Round")]
     public int currentRoundTime;
@@ -22,10 +23,12 @@ public class GameManager : MonoBehaviour
     private void OnEnable()
     {
         OnItemDropedCorrectly += AddPointToPlayer;
+        OnClipRelease += AddReleaseClipToPlayer;
     }
     private void OnDisable()
     {
         OnItemDropedCorrectly -= AddPointToPlayer;
+        OnClipRelease -= AddReleaseClipToPlayer;
     }
 
     private void Awake()
@@ -56,13 +59,18 @@ public class GameManager : MonoBehaviour
         playerStats = new PlayerStats[numberOfPlayers];
         for (int i = 0; i < playerStats.Length; i++)
         {
-            playerStats[i] = new PlayerStats(100, 5, 5, 10, 1, 1, 0);
+            playerStats[i] = new PlayerStats(100, 0);
         }
     }
     public void AddPointToPlayer()
     {
         playerStats[currentPlayer].AddPoints(1);
     }
+    public void AddReleaseClipToPlayer(ClipType clipType)
+    {
+        playerStats[currentPlayer].ReleaseClip(clipType);
+    }
+
     public void DamagePlayer(int damage)
     {
         playerStats[currentPlayer].MakeDamageOnPlayer(damage);

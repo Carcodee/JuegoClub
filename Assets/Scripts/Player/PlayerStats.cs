@@ -7,28 +7,64 @@ using UnityEngine;
 public class PlayerStats
 {
     public int patienHealth = 100;
-    public int heightSpeed = 5;
-    public float staminaTotalTime = 5.0f;
-    public float staminaTotalCooldown = 10.0f;
-    public float handSpeed = 1.0f;
-    public float holdTime = 1.0f;
-    public int playerPoints;
-
+    public int SessionGoal = 5 ;
     
-    public PlayerStats(int patienHealth, int heightSpeed, float staminaTotalTime, float staminaTotalCooldown, float handSpeed, float holdTime, int playerPoints)
+    public int playerPoints;
+    public int headClips;
+    public int chestClips;
+    
+    public PlayerStats(int patienHealth, int playerPoints)
     {
         this.patienHealth = patienHealth;
-        this.heightSpeed = heightSpeed;
-        this.staminaTotalTime = staminaTotalTime;
-        this.staminaTotalCooldown = staminaTotalCooldown;
-        this.handSpeed = handSpeed;
-        this.holdTime = holdTime;
         this.playerPoints = playerPoints;
     }
 
     public void AddPoints(int amount)   
     {
         playerPoints+= amount;
+        if (playerPoints>= SessionGoal)
+        {
+            Debug.Log("Win");
+
+            //win
+        }
+    }
+
+    public void ReleaseClip(ClipType clipType)
+    {
+        switch (clipType)
+        {
+            //TODO: bad solution for this, need to change to a class or something
+            case ClipType.HeadR:
+                headClips++;
+                OpenHeadRAnimation();
+                if (headClips>=2)
+                {
+                    OpenHeadAnimation();
+                    Debug.Log("OPEN HEAD");
+                }
+                break;
+            
+            case ClipType.HeadL:
+                headClips++;
+                OpenHeadLAnimation();
+                if (headClips>=2)
+                {
+                    OpenHeadAnimation();
+                    Debug.Log("OPEN HEAD");
+                }
+                break;
+            
+            case ClipType.Chest:
+                chestClips++;
+                if (chestClips>=5)
+                {
+                    OpenChestAnimation();
+                    Debug.Log("OPEN Chest");
+
+                }
+                break;
+        }
     }
     public void MakeDamageOnPlayer(int damage)
     {
@@ -42,4 +78,29 @@ public class PlayerStats
             //die
         }
     }
+    public void OpenHeadAnimation()
+    {
+        //open head
+    }
+    public void OpenHeadRAnimation()
+    {
+        //open Right Head
+    }
+    public void OpenHeadLAnimation()
+    {
+        //open Left Head
+    }
+    public void OpenChestAnimation()
+    {
+        //open chest
+    }
+    
+}
+
+public enum ClipType
+{
+    Head,
+    HeadR,
+    HeadL,
+    Chest
 }
