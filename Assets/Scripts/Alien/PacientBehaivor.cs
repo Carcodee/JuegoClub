@@ -5,6 +5,7 @@ using UnityEngine;
 public class PacientBehaivor : MonoBehaviour
 {
     public Animator animator;
+    
     void Start()
     {
         
