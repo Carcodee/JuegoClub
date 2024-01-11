@@ -8,11 +8,12 @@ using UnityEngine.UI;
 
 public class HandController : MonoBehaviour
 {
+    [Header("Cams")]
     public CinemachineVirtualCamera vcam;
     public CinemachineVirtualCamera lookStatsVcam;
     public CinemachineVirtualCamera lookDroppeableZoneVcam;
     public Camera cam;
-
+    public CinemachineBrain cinemachine;
 
 
     public LayerMask playeableZone;
@@ -48,9 +49,11 @@ public class HandController : MonoBehaviour
     
     void Start()
     {
+        
         currentObject.parent = transform;
         pickPoint.parent = transform;
         controller.Initializate();
+        StartCoroutine(LookPacientTransition()) ;
         //TODO: Do lerp of cursor pos
     }
 
@@ -104,6 +107,13 @@ public class HandController : MonoBehaviour
         lookDroppeableZoneVcam.Priority =0;
         lookStatsVcam.Priority = 10;
     }
+    public IEnumerator LookPacientTransition()
+    {
+        yield return new WaitForSeconds(0.5f);
+        LookPacient();
+        yield return new WaitForSeconds(0.5f);
+        StartCoroutine(SetTransitionAfterBlendCoroutine());
+    }
     public void LookPacient()
     {
         vcam.Priority = 10;
@@ -115,6 +125,15 @@ public class HandController : MonoBehaviour
         vcam.Priority = 0;
         lookStatsVcam.Priority = 0;
         lookDroppeableZoneVcam.Priority = 10;
+    }
+    IEnumerator SetTransitionAfterBlendCoroutine()
+    {
+        while (cinemachine.IsBlending)
+        {
+            Debug.Log("Blending");
+            yield return null;
+        }
+        cinemachine.m_DefaultBlend.m_Time = 0.2f;
     }
     public void SetHandPos()
     {

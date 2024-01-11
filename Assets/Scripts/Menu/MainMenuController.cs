@@ -7,6 +7,7 @@ using UnityEngine.SceneManagement;
 
 public class MainMenuController : MonoBehaviour
 {
+    public static MainMenuController instance;
     public Animator animator;
     public CinemachineVirtualCamera mainCamera;
     public CinemachineVirtualCamera selectCamera;
@@ -19,9 +20,15 @@ public class MainMenuController : MonoBehaviour
     
     
     public GameObject book;
+    public bool canEnter = false;
+    public AsyncOperation loadScene;
+    
+    SceneCameras currentSceneCameras;
+    
     void Start()
     {
-        
+        instance = this;
+        MainMenuController.instance.currentSceneCameras = currentSceneCameras;
     }
 
     void Update()
@@ -38,23 +45,46 @@ public class MainMenuController : MonoBehaviour
         mainCamera.Priority = 0;
         selectCamera.Priority = 1;
         enterCamera.Priority = 0;
+        StartCoroutine(LoadSceneAsync());
     }
 
     public void EnterGame()
     {
-        mainCamera.Priority = 0;
-        selectCamera.Priority = 0;
-        enterCamera.Priority = 1;
+
+        if (loadScene.progress >= 0.9f)
+        {
+            loadScene.allowSceneActivation = true;
+            mainCamera.Priority = 0;
+            selectCamera.Priority = 10;
+        }
+
+
     }
 
     public void OnCameraEntered()
     {
-
         StartCoroutine(LoadScene());
     }
     IEnumerator LoadScene()
     {
         yield return new WaitForSeconds(2);
         SceneManager.LoadScene("OutdoorsScene", LoadSceneMode.Additive);
+    }
+    IEnumerator LoadSceneAsync()
+    {
+        loadScene = SceneManager.LoadSceneAsync("OutdoorsScene", LoadSceneMode.Additive);
+        loadScene.allowSceneActivation = false;
+        while (!loadScene.isDone)
+        {
+            Debug.Log(loadScene.progress);
+            yield return null;
+
+        }
+        Debug.Log("Scene Loaded");
+        canEnter = true;
+
+
+
+
     }
 }
