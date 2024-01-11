@@ -13,17 +13,7 @@ public class CameraController : MonoBehaviour
     public static CameraController instance;
     void Start()
     {
-        if (instance == null)
-        {
-            instance = this;
-        }
-        else
-        {
-            Destroy(this.gameObject);
-            return;
-        }
-        DontDestroyOnLoad(gameObject);
-        currentSceneCameras = mainMenuCams;
+
         
     }
 
@@ -57,7 +47,7 @@ public class CameraController : MonoBehaviour
     
     public void EnterGame()
     {
-          
+
     }
     
     public void LookPacient()
