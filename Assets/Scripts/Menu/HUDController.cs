@@ -2,16 +2,19 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class HUDController : MonoBehaviour
 {
     [Header("HUD")]
     public TextMeshProUGUI points;
     public TextMeshProUGUI hp;
-    public TextMeshProUGUI stamina;
     public TextMeshProUGUI PlayerTime;
     [Header("Pause")]
     public GameObject pauseMenu;
+
+    public Image[] images;
+    public Image currentHpImage;
 
     private void OnEnable()
     {
@@ -28,6 +31,7 @@ public class HUDController : MonoBehaviour
 
     void Update()
     {
+        HandleHpStates();
         UpdateStats();
         if (Input.GetKeyDown(KeyCode.Escape))
         {
@@ -37,10 +41,32 @@ public class HUDController : MonoBehaviour
     }
     public void UpdateStats()
     {
-        points.text = "Points: " + GameManager.instance.playerStats[GameManager.instance.currentPlayer].playerPoints;
-        hp.text = "Hp: " + GameManager.instance.playerStats[GameManager.instance.currentPlayer].patienHealth;
-        stamina.text = "Stamina: " + GameManager.instance.playerStats[GameManager.instance.currentPlayer].playerPoints;
+        points.text = "Score: " + GameManager.instance.playerStats[GameManager.instance.currentPlayer].playerPoints;
+        hp.text = GameManager.instance.playerStats[GameManager.instance.currentPlayer].patienHealth.ToString();
         PlayerTime.text = "Time Left: " + GameManager.instance.currentRoundTime;
+
+    }
+
+    public void HandleHpStates() {
+
+        int currentHp = GameManager.instance.playerStats[GameManager.instance.currentPlayer].patienHealth;
+
+        if (currentHp==100) {
+            currentHpImage = images[0];
+        }
+        if (currentHp < 60) {
+            currentHpImage = images[1];
+        }
+        if (currentHp < 25) {
+            currentHpImage = images[2];
+        }
+        if (currentHp <= 0) {
+            currentHpImage = images[3];
+        }
+        for (int i = 0; i < images.Length; i++) {
+            images[i].gameObject.SetActive(false);
+        }
+        currentHpImage.gameObject.SetActive(true);
 
     }
     public void Pause()

@@ -19,24 +19,24 @@ public class CameraController : MonoBehaviour
 
     public void SetMainMenuCam()
     {
-        mainMenuCams.SetPriority(10,CamType.MainMenu);
+        //mainMenuCams.SetPriority(10,CamType.MainMenu);
     }
     void Update()
     {
 
 
-        if ((Input.GetKeyDown(KeyCode.Tab)))
-        {
-            LookStats();
-        }
-        if (Input.GetKeyDown(KeyCode.D))
-        {
-            LookDroppeableZone();
-        }
-        if (Input.GetKeyUp(KeyCode.Tab) || Input.GetKeyUp(KeyCode.D))
-        {
-            LookPacient();
-        }
+        //if ((Input.GetKeyDown(KeyCode.Tab)))
+        //{
+        //    LookStats();
+        //}
+        //if (Input.GetKeyDown(KeyCode.D))
+        //{
+        //    LookDroppeableZone();
+        //}
+        //if (Input.GetKeyUp(KeyCode.Tab) || Input.GetKeyUp(KeyCode.D))
+        //{
+        //    LookPacient();
+        //}
 
     }
 
@@ -50,18 +50,18 @@ public class CameraController : MonoBehaviour
 
     }
     
-    public void LookPacient()
-    {
-        inGameCams.SetPriority(10,CamType.LookPacient);
-    }
-    public void LookDroppeableZone()
-    {
-        inGameCams.SetPriority(10,CamType.LookDroppeableZone);
-    }
-    public void LookStats()
-    {
-        inGameCams.SetPriority(10,CamType.LookStats);
-    }
+    //public void LookPacient()
+    //{
+    //    inGameCams.SetPriority(10,CamType.LookPacient);
+    //}
+    //public void LookDroppeableZone()
+    //{
+    //    inGameCams.SetPriority(10,CamType.LookDroppeableZone);
+    //}
+    //public void LookStats()
+    //{
+    //    inGameCams.SetPriority(10,CamType.LookStats);
+    //}
 
 
 
@@ -76,20 +76,20 @@ public class SceneCameras
     public CinemachineBrain cinemachineBrain;
     public CameraConfig[] vcams;
         
-    public void SetPriority(int priority, CamType index)
-    {
-        for (int i = 0; i < vcams.Length; i++)
-        {
-            if (vcams[i].camType==index)
-            {
-                vcams[i].vcam.Priority = priority;
-            }
-            else
-            {
-                vcams[i].vcam.Priority = 0;
-            }
-        }
-    }
+    //public void SetPriority(int priority, CamType index)
+    //{
+    //    for (int i = 0; i < vcams.Length; i++)
+    //    {
+    //        if (vcams[i].camType==index)
+    //        {
+    //            vcams[i].vcam.Priority = priority;
+    //        }
+    //        else
+    //        {
+    //            vcams[i].vcam.Priority = 0;
+    //        }
+    //    }
+    //}
 }
 
 

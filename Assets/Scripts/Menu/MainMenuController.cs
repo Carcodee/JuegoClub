@@ -15,6 +15,7 @@ public class MainMenuController : MonoBehaviour
     public CinemachineVirtualCamera selectCamera;
     public CinemachineVirtualCamera enterCamera;
     public CinemachineVirtualCamera optionsCamera;
+    public CinemachineVirtualCamera controlsCamera;
     
     
     public ButtonManagerWithIcon startButton;
@@ -78,6 +79,18 @@ public class MainMenuController : MonoBehaviour
         optionsCamera.Priority = 1;
 
     }
+    public void Controls() {
+        startButton.gameObject.SetActive(false);
+        creditsButton.gameObject.SetActive(false);
+        exitButton.gameObject.SetActive(false);
+        options.gameObject.SetActive(false);
+        mainCamera.Priority = 0;
+        selectCamera.Priority = 0;
+        enterCamera.Priority = 0;
+        optionsCamera.Priority = 0;
+        controlsCamera.Priority = 1;
+
+    }
     public void ExitOptions() {
         startButton.gameObject.SetActive(true);
         creditsButton.gameObject.SetActive(true);
@@ -87,6 +100,18 @@ public class MainMenuController : MonoBehaviour
         selectCamera.Priority = 0;
         enterCamera.Priority = 0;
         optionsCamera.Priority = 0;
+    }
+    public void ExitControls() {
+        startButton.gameObject.SetActive(true);
+        creditsButton.gameObject.SetActive(true);
+        exitButton.gameObject.SetActive(true);
+        options.gameObject.SetActive(true);
+        mainCamera.Priority = 1;
+        selectCamera.Priority = 0;
+        enterCamera.Priority = 0;
+        optionsCamera.Priority = 0;
+        controlsCamera.Priority = 0;
+
     }
 
     public void EnterGame()

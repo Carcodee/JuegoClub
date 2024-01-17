@@ -59,29 +59,16 @@ public class HandController : MonoBehaviour
 
     void Update()
     {
-        //if (Input.GetKey(KeyCode.Mouse1))
-        //{
-        //    RotateHand();
-        //    return;
-        //}
-        //
-        // if (Input.GetKey(KeyCode.A))
-        // {
-        //     vcam.transform.Translate(-Vector3.right * Time.deltaTime * 2);
-        // }
-        // if (Input.GetKey(KeyCode.D))
-        // {
-        //     vcam.transform.Translate(Vector3.right * Time.deltaTime * 2);
-        // }
-        if(Input.GetKeyDown(KeyCode.Tab))
+
+        if(Input.GetKeyDown(KeyCode.W))
         {
             LookStats();
         }
-        if (Input.GetKeyDown(KeyCode.D))
+        if (Input.GetKeyDown(KeyCode.Space))
         {
             LookDroppeableZone();
         }
-        if (Input.GetKeyUp(KeyCode.Tab)||Input.GetKeyUp(KeyCode.D))
+        if (Input.GetKeyUp(KeyCode.W)||Input.GetKeyUp(KeyCode.Space))
         {
             LookPacient();
         }

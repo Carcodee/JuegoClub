@@ -12,7 +12,7 @@ public class GameManager : MonoBehaviour
 
     [Header("Round")]
     public int currentRoundTime;
-    public int totalRoundTime = 90;
+    public float totalRoundTime = 90;
     public int currentRound = 1;
 
     [Header("Players")]
@@ -48,13 +48,16 @@ public class GameManager : MonoBehaviour
     
     void Start()
     {
-    
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+        if(totalRoundTime > 0) {
+            totalRoundTime -= Time.deltaTime;
+        }else if(totalRoundTime <= 0) {
+
+        }
     }
     void InitializatePlayers()
     {
